@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Zeyada&family=Homemade+Apple&family=Short+Stack&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* evita rolagem/zoom acidental enquanto arrasta os papeis */
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #fff5f7 0%, #ffe1e8 45%, #ffc9d6 100%);
+  touch-action: none; /* deixa o gesto de arrastar controlado pelo JS, sem rolar a página */
+  position: relative;
+}
+
+/* corações flutuando de fundo, bem discretos, sem atrapalhar o toque */
+#floatingHearts {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: -10%;
+  font-size: 22px;
+  color: #ff6b8a;
+  opacity: 0.55;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.55; }
+  90% { opacity: 0.4; }
+  100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
+}
+
+audio {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: min(320px, 90vw);
+  max-width: 320px;
+  border-radius: 30px;
+  filter: drop-shadow(0 3px 8px rgba(180, 40, 70, 0.25));
+}
+
+/* contador de dias juntos */
+.days-counter {
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 8px 18px;
+  border-radius: 30px;
+  box-shadow: 0 4px 14px rgba(180, 40, 70, 0.18);
+  font-family: 'Short Stack', cursive;
+  color: #c23a5e;
+  white-space: nowrap;
+}
+
+.days-counter-label {
+  font-size: clamp(11px, 2.6vw, 14px);
+}
+
+.days-counter-number {
+  font-size: clamp(16px, 4vw, 20px);
+  font-weight: bold;
+}
+
+/* dica sutil de "arraste" que some sozinha */
+.swipe-hint {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9997;
+  font-family: 'Short Stack', cursive;
+  font-size: clamp(12px, 3vw, 15px);
+  color: #a83a5a;
+  background: rgba(255,255,255,0.8);
+  padding: 6px 14px;
+  border-radius: 20px;
+  opacity: 0.9;
+  animation: hintPulse 2.2s ease-in-out infinite, hintFade 1s ease-in 6s forwards;
+  pointer-events: none;
+}
+
+@keyframes hintPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.05); }
+}
+
+@keyframes hintFade {
+  to { opacity: 0; visibility: hidden; }
+}
+
+.paper {
+  background-color: #fffdf7;
+  background-image:
+    linear-gradient(rgba(255, 250, 245, 0.55), rgba(255, 250, 245, 0.55)),
+    url("https://i0.wp.com/textures.world/wp-content/uploads/2018/10/2-Millimeter-Paper-Background-copy.jpg?ssl=1");
+  background-size: 500px;
+  background-position: center center;
+  padding: 20px 100px;
+  border-radius: 6px;
+  transform: rotateZ(-5deg);
+  box-shadow: 2px 18px 28px 0px rgba(120, 20, 45, 0.28);
+  position: absolute;
+  max-width: min(600px, 88vw);
+  touch-action: none;
+  cursor: grab;
+  z-index: 1;
+  transition: box-shadow 0.2s ease;
+}
+
+.paper:active {
+  cursor: grabbing;
+  box-shadow: 2px 24px 34px 0px rgba(120, 20, 45, 0.35);
+}
+
+.paper.heart {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  padding: 0;
+  border-radius: 50%;
+  background-color: #ffe3ea;
+}
+
+.paper.image {
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.paper.image p {
+  font-size: clamp(16px, 5vw, 30px);
+}
+
+.paper.image img {
+  border-radius: 3px;
+}
+
+img {
+  max-height: 200px;
+  width: 100%;
+  user-select: none;
+  pointer-events: none; /* deixa o toque passar pro .paper que faz o drag */
+}
+
+.paper.heart::after {
+  content: "";
+  background-image: url('https://cdn.pixabay.com/photo/2016/03/31/19/25/cartoon-1294994__340.png');
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: 150px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+}
+
+.paper:nth-of-type(3n) {
+  background-position: left top;
+}
+
+p {
+  font-family: 'Zeyada';
+  font-size: clamp(22px, 6vw, 50px);
+  color: #7a1734;
+  opacity: 0.85;
+  user-select: none;
+  pointer-events: none; /* garante que o toque no texto também arraste o papel */
+  margin: 8px 0;
+}
+
+/* Telas pequenas: padding lateral bem menor pra caber na largura do celular */
+@media (max-width: 600px) {
+  .paper {
+    padding: 16px 24px;
+  }
+  .paper.image {
+    padding: 8px;
+  }
+  .days-counter {
+    top: 58px;
+    padding: 6px 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  audio {
+    top: 6px;
+  }
+  .days-counter {
+    top: 52px;
+  }
+}
